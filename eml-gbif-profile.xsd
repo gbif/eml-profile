@@ -24,7 +24,7 @@
           </xs:annotation>
         </xs:element>
         <!-- "Metadata author" the agent authoring the eml file -->
-        <xs:element name="metadataProvider" type="agentType" maxOccurs="unbounded">
+        <xs:element name="metadataProvider" type="agentType" minOccurs="0" maxOccurs="unbounded">
           <xs:annotation>
             <xs:documentation>The party responsible for the creation of the metadata document</xs:documentation>
           </xs:annotation>
