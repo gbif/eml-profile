@@ -330,6 +330,36 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="introduction" minOccurs="0">
+    <xs:annotation>
+      <xs:documentation>One to many paragraphs that provide background and context for the dataset with appropriate figures and references.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="para"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="gettingStarted" minOccurs="0">
+    <xs:annotation>
+      <xs:documentation>One or more paragraphs that describe the overall interpretation, content and structure of the dataset.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="para"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="acknowledgements" minOccurs="0">
+    <xs:annotation>
+      <xs:documentation>One or more sentences that acknowledge funders and other key contributors to the study (excluding the dataset authors listed in the creator field).</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="para"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="methods">
     <xs:annotation>
       <xs:documentation>The methods field documents scientific methods used in the collection of this dataset. It includes information on items such as tools, instrument calibration and software.</xs:documentation>
