@@ -403,11 +403,13 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="project">
+  <xs:element name="project" type="projectType">
     <xs:annotation>
       <xs:documentation>The project field contains information on the project in which this dataset was collected. It includes information such as project personnel, funding, study area, project design and related projects.</xs:documentation>
     </xs:annotation>
-    <xs:complexType>
+  </xs:element>
+  <xs:complexType name="projectType">
+    <xs:choice>
       <xs:sequence>
         <xs:element ref="title"/>
         <xs:element name="personnel" type="agentWithRoleType" maxOccurs="unbounded">
@@ -415,7 +417,7 @@
             <xs:documentation>The Personnel field extends ResponsibleParty with role information and is used to document people involved in a research project by providing contact information and their role in the project. </xs:documentation>
           </xs:annotation>
         </xs:element>
-        <xs:element minOccurs="0" ref="abstract"/>
+        <xs:element ref="abstract" minOccurs="0"/>
         <xs:element name="funding" minOccurs="0">
           <xs:annotation>
             <xs:documentation>The funding field is used to provide information about funding sources for the project such as: grant and contract numbers; names and addresses of funding sources.</xs:documentation>
@@ -425,6 +427,20 @@
               <xs:element ref="para"/>
             </xs:sequence>
           </xs:complexType>
+        </xs:element>
+        <xs:element name="award" type="awardType" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>The award field is used to provide specific information
+              about the funding awards for a project in a structured format.  Sub-fields
+              are provided for the name of the funding agency, the Open Funder Registry
+              identifiers for the agency and program that made the award, the award
+              number assigned, the title of the award, and the URL to the award page
+              describing the award. The award field replaces the earlier funding field
+              from prior EML version releases.  In general, the funding agency should be
+              listed with a cross-reference to the appropriate identifier from the
+              Open Funder Registry (included in the EML distribution, but which is
+              also update periodically from the Open Funder Registry).</xs:documentation>
+          </xs:annotation>
         </xs:element>
         <xs:element name="studyAreaDescription" minOccurs="0">
           <xs:annotation>
@@ -441,14 +457,74 @@
             <xs:documentation>The field designDescription contains general textual descriptions of research design. It can include detailed accounts of goals, motivations, theory, hypotheses, strategy, statistical design, and actual work. </xs:documentation>
           </xs:annotation>
         </xs:element>
+        <xs:element name="relatedProject" type="projectType" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>This field is a recursive link to another project.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
       </xs:sequence>
-      <xs:attribute name="id" type="xs:string" use="optional">
+    </xs:choice>
+    <xs:attribute name="id" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation>A unique identifier for the project. This can be used to link multiple datasets that are associated in some way with the same project.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="awardType">
+    <xs:annotation>
+      <xs:documentation>The awardType is used to enter information about a funding award
+        associated with a project.  The containing project contains the list of
+        investigators and for the award, while the `award` field contains specifics
+        such as the agency name, award number, and funding program identifiers.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="funderName" type="NonEmptyStringType" minOccurs="1" maxOccurs="1">
+        <xs:documentation>The name of the funding institution, with fully expanded acronyms
+          to show the full, official name of the funding agency. In general, this should match
+          the official name of the funder as listed in an Authority such as the Open
+          Funder Registry.  The Open Funder Registry and other organizational authorities may
+          provide a list of other alternative names for the funding agency.</xs:documentation>
+      </xs:element>
+      <xs:element name="funderIdentifier" type="NonEmptyStringType" minOccurs="0" maxOccurs="unbounded">
         <xs:annotation>
-          <xs:documentation>A unique identifier for the project. This can be used to link multiple datasets that are associated in some way with the same project.</xs:documentation>
+          <xs:documentation>The funder identifier is used to provide one or more
+            canonical identifiers that reference the funder.  These identifiers
+            should be globally unique.  The most common form of a funder identifier
+            is a DOI identifier of an institution or program drawn from the CrossRef
+            Open Funder Registry (https://gitlab.com/crossref/open_funder_registry),
+            which assigns DOIs to each funding agency and to their programs, and
+            links these together in a navigable hierarchy.  A copy of the current
+            Funder Registry is included as an RDF file with EML for reference, but
+            as the list is constantly growing, users can retrieve new copies of the
+            RDF file to get updates and current metadata about funders.</xs:documentation>
         </xs:annotation>
-      </xs:attribute>
-    </xs:complexType>
-  </xs:element>
+      </xs:element>
+      <xs:element name="awardNumber" type="NonEmptyStringType" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>The awardNumber field provides the unique identifier used by
+            the funder to uniquely identify an award.  These are typically alphanumeric values
+            that are unique within the system used by a given funder.  The number should be listed
+            using the canonical form that each funder uses to express its award numbers, and not
+            be prefixed or postfixed with extra text such as the acronym of the funder or the name
+            of the funder, which is available instead in the funderName field.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="title" type="NonEmptyStringType" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>The title field is used for the title of the award or grant
+            being described.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="awardUrl" type="NonEmptyStringType" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>Typically, the awardUrl is use to find and locate the award, and
+            generally addresses the internet location to find out more information about the
+            award.  This should point to a funder site for the award, rather than a project site.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
 
   <xs:element name="descriptor">
     <xs:annotation>
