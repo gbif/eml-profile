@@ -48,6 +48,9 @@
         <xs:element ref="distribution" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="coverage" minOccurs="0"/>
         <xs:element ref="purpose" minOccurs="0"/>
+        <xs:element name="introduction" minOccurs="0"/>
+        <xs:element name="gettingStarted" minOccurs="0"/>
+        <xs:element name="acknowledgements" minOccurs="0"/>
         <xs:element minOccurs="0" name="maintenance">
           <xs:complexType>
             <xs:sequence>
@@ -394,7 +397,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="introduction" minOccurs="0">
+  <xs:element name="introduction">
     <xs:annotation>
       <xs:documentation>One to many paragraphs that provide background and context for the dataset with appropriate figures and references.</xs:documentation>
     </xs:annotation>
@@ -404,7 +407,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="gettingStarted" minOccurs="0">
+  <xs:element name="gettingStarted">
     <xs:annotation>
       <xs:documentation>One or more paragraphs that describe the overall interpretation, content and structure of the dataset.</xs:documentation>
     </xs:annotation>
@@ -414,7 +417,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="acknowledgements" minOccurs="0">
+  <xs:element name="acknowledgements">
     <xs:annotation>
       <xs:documentation>One or more sentences that acknowledge funders and other key contributors to the study (excluding the dataset authors listed in the creator field).</xs:documentation>
     </xs:annotation>
@@ -543,11 +546,13 @@
     </xs:annotation>
     <xs:sequence>
       <xs:element name="funderName" type="NonEmptyStringType" minOccurs="1" maxOccurs="1">
-        <xs:documentation>The name of the funding institution, with fully expanded acronyms
-          to show the full, official name of the funding agency. In general, this should match
-          the official name of the funder as listed in an Authority such as the Open
-          Funder Registry.  The Open Funder Registry and other organizational authorities may
-          provide a list of other alternative names for the funding agency.</xs:documentation>
+        <xs:annotation>
+          <xs:documentation>The name of the funding institution, with fully expanded acronyms
+            to show the full, official name of the funding agency. In general, this should match
+            the official name of the funder as listed in an Authority such as the Open
+            Funder Registry.  The Open Funder Registry and other organizational authorities may
+            provide a list of other alternative names for the funding agency.</xs:documentation>
+        </xs:annotation>
       </xs:element>
       <xs:element name="funderIdentifier" type="NonEmptyStringType" minOccurs="0" maxOccurs="unbounded">
         <xs:annotation>
