@@ -45,7 +45,7 @@
         <xs:element ref="additionalInfo" minOccurs="0"/>
         <xs:element ref="intellectualRights" minOccurs="0"/>
         <xs:element ref="licensed" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="distribution" minOccurs="0"/>
+        <xs:element ref="distribution" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="coverage" minOccurs="0"/>
         <xs:element ref="purpose" minOccurs="0"/>
         <xs:element minOccurs="0" name="maintenance">
@@ -1462,7 +1462,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="distribution" maxOccures="unbounded">
+  <xs:element name="distribution">
     <xs:annotation>
       <xs:documentation>This element provides information on how the resource is distributed. When used at the resource level, this element can provide only general information, but elements for describing connections to online systems are provided.</xs:documentation>
     </xs:annotation>
