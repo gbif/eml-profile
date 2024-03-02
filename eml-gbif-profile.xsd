@@ -16,6 +16,14 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="alternateIdentifier" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="shortName" type="NonEmptyStringType" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>The 'shortName' field provides a concise name that
+              describes the resource that is being documented. It is the
+              appropriate place to store a filename associated with other storage
+              systems.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
         <xs:element ref="title" maxOccurs="unbounded"/>
         <!-- Original creator of the dataset/resource, not necessarily the agent authoring the eml file nor the primary contact -->
         <xs:element name="creator" type="agentType" maxOccurs="unbounded">
@@ -45,6 +53,41 @@
             <xs:sequence>
               <xs:element ref="description"/>
               <xs:element name="maintenanceUpdateFrequency" type="MaintUpFreqType"/>
+              <xs:element name="changeHistory" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                  <xs:documentation>A description of changes made to the data since
+                    its release.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="changeScope" type="NonEmptyStringType">
+                      <xs:annotation>
+                        <xs:documentation>The expression should unambiguously identify
+                          the entity(s) and attribute(s) that were
+                          changed.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element name="oldValue" type="NonEmptyStringType">
+                      <xs:annotation>
+                        <xs:documentation>The previous value or an expression that
+                          describes the previous value of the
+                          data.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element name="changeDate" type="xs:date">
+                      <xs:annotation>
+                        <xs:documentation>The date the changes were applied.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element name="comment" type="NonEmptyStringType" minOccurs="0">
+                      <xs:annotation>
+                        <xs:documentation>Explanation or justification for the change
+                          made to the data.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
