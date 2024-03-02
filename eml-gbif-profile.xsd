@@ -93,7 +93,7 @@
         </xs:element>
         <!-- Current primary contact for the dataset. The creator of the resource might be dead, left the organisation or doesn't want to be bothered. -->
         <xs:element name="contact" type="agentType" maxOccurs="unbounded"/>
-        <xs:element ref="publisher" minOccurs="0">
+        <xs:element name="publisher" type="agentType" minOccurs="0">
           <xs:annotation>
             <xs:documentation>The publisher of this data set. At times this is
               a traditional publishing house, but it may also simply be an
@@ -156,6 +156,9 @@
       <xs:element ref="onlineUrl" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element ref="userId" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
+    <xs:attribute name="id" type="IDType" use="optional"/>
+    <xs:attribute name="system" type="SystemType" use="optional"/>
+    <xs:attribute name="scope" type="ScopeType" use="optional"/>
   </xs:complexType>
   <xs:complexType name="agentWithRoleType">
     <xs:complexContent>
@@ -387,86 +390,6 @@
       <xs:sequence>
         <xs:element ref="para"/>
       </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="publisher">
-    <xs:complexType>
-      <xs:choice>
-        <xs:sequence>
-          <xs:choice maxOccurs="unbounded">
-            <xs:element ref="individualName">
-              <xs:annotation>
-                <xs:documentation>The individualName
-                  field contains subfields so that  a person's name can be broken
-                  down into parts.</xs:documentation>
-              </xs:annotation>
-            </xs:element>
-            <xs:element name="organizationName" type="NonEmptyStringType">
-              <xs:annotation>
-                <xs:documentation>The responsible party field contains the full
-                  name of the organization that is associated with the resource.
-                  This field is intended to describe which institution or overall
-                  organization is associated with the resource being described.</xs:documentation>
-              </xs:annotation>
-            </xs:element>
-            <xs:element name="positionName" type="NonEmptyStringType">
-              <xs:annotation>
-                <xs:documentation>This field is intended to be used instead of a
-                  particular person or full organization name. If the associated
-                  person who holds the role changes frequently, then Position
-                  Name would be used for consistency.</xs:documentation>
-              </xs:annotation>
-            </xs:element>
-          </xs:choice>
-          <xs:element ref="address" minOccurs="0" maxOccurs="unbounded">
-            <xs:annotation>
-              <xs:documentation>The address field is a container for multiple
-                subfields that describe the physical or electronic address of the
-                responsible party for a resource.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element ref="phone" minOccurs="0" maxOccurs="unbounded">
-            <xs:annotation>
-              <xs:documentation>The phone field describes information about the
-                responsible party's telephone, be it a voice phone, fax, or
-                TTD/TTY type telephone. This field contains an attribute used to
-                identify the type.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element ref="electronicMailAddress" minOccurs="0" maxOccurs="unbounded">
-            <xs:annotation>
-              <xs:documentation>The electronic mail address is the email address
-                for the party. It is intended to be an Internet SMTP email
-                address, which should consist of a username followed by the @
-                symbol, followed by the email server domain name address. Other
-                address types are allowable.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element ref="onlineUrl" minOccurs="0" maxOccurs="unbounded">
-            <xs:annotation>
-              <xs:documentation>A link to associated online information, usually
-                a web site. When the party represents an organization, this is
-                the URL to a website or other online information about the
-                organization. If the party is an individual, it might be their
-                personal web site or other related online information about the
-                party.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element ref="userId" minOccurs="0" maxOccurs="unbounded">
-            <xs:annotation>
-              <xs:documentation>An identifier that links this party to a
-                directory of individuals.  Although specific contact information
-                for a party might change, the underlying correspondence to a
-                real individual does not.  This identifier provides a pointer
-                within a directory of individuals that may contain further, and
-                possibly more current, information about the party.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-        </xs:sequence>
-      </xs:choice>
-      <xs:attribute name="id" type="IDType" use="optional"/>
-      <xs:attribute name="system" type="SystemType" use="optional"/>
-      <xs:attribute name="scope" type="ScopeType" use="optional" default="document"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="introduction" minOccurs="0">
