@@ -150,10 +150,10 @@
           </xs:annotation>
         </xs:element>
       </xs:choice>
-      <xs:element ref="address" minOccurs="0"/>
-      <xs:element ref="phone" minOccurs="0"/>
+      <xs:element ref="address" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element ref="phone" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element ref="electronicMailAddress" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element ref="onlineUrl" minOccurs="0"/>
+      <xs:element ref="onlineUrl" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element ref="userId" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
