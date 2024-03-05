@@ -153,7 +153,7 @@
           </xs:annotation>
         </xs:element>
       </xs:choice>
-      <xs:element ref="address" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element ref="address" minOccurs="0"/>
       <xs:element ref="phone" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element ref="electronicMailAddress" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element ref="onlineUrl" minOccurs="0" maxOccurs="unbounded"/>
@@ -1393,7 +1393,7 @@
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="deliveryPoint" type="NonEmptyStringType" minOccurs="0">
+        <xs:element name="deliveryPoint" type="NonEmptyStringType" minOccurs="0" maxOccurs="unbounded">
           <xs:annotation>
             <xs:documentation>The delivery point field is used for the physical address for postal communication, e.g., GBIF Secretariat, Universitetsparken 15</xs:documentation>
           </xs:annotation>
