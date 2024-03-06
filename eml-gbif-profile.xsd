@@ -48,9 +48,9 @@
         <xs:element ref="distribution" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="coverage" minOccurs="0"/>
         <xs:element ref="purpose" minOccurs="0"/>
-        <xs:element name="introduction" minOccurs="0"/>
-        <xs:element name="gettingStarted" minOccurs="0"/>
-        <xs:element name="acknowledgements" minOccurs="0"/>
+        <xs:element ref="introduction" minOccurs="0"/>
+        <xs:element ref="gettingStarted" minOccurs="0"/>
+        <xs:element ref="acknowledgements" minOccurs="0"/>
         <xs:element minOccurs="0" name="maintenance">
           <xs:complexType>
             <xs:sequence>
