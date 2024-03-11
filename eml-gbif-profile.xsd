@@ -397,35 +397,20 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="introduction">
+  <xs:element name="introduction" type="TextType">
     <xs:annotation>
       <xs:documentation>One to many paragraphs that provide background and context for the dataset with appropriate figures and references.</xs:documentation>
     </xs:annotation>
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="para"/>
-      </xs:sequence>
-    </xs:complexType>
   </xs:element>
-  <xs:element name="gettingStarted">
+  <xs:element name="gettingStarted" type="TextType">
     <xs:annotation>
       <xs:documentation>One or more paragraphs that describe the overall interpretation, content and structure of the dataset.</xs:documentation>
     </xs:annotation>
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="para"/>
-      </xs:sequence>
-    </xs:complexType>
   </xs:element>
-  <xs:element name="acknowledgements">
+  <xs:element name="acknowledgements" type="TextType">
     <xs:annotation>
       <xs:documentation>One or more sentences that acknowledge funders and other key contributors to the study (excluding the dataset authors listed in the creator field).</xs:documentation>
     </xs:annotation>
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="para"/>
-      </xs:sequence>
-    </xs:complexType>
   </xs:element>
   <xs:element name="methods">
     <xs:annotation>
@@ -1618,5 +1603,179 @@
         <xs:attribute ref="xml:lang" use="optional"/>
       </xs:extension>
     </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="TextType" mixed="true">
+    <xs:annotation>
+      <xs:documentation>The "text" element allows for both formatted and unformatted text blocks to be included in EML. It can contain a number of relevant subsections that allow the use of titles, sections, and paragraphs in the text block. This markup is a subset of DocBook, or alternatively can be specified using Markdown text blocks.</xs:documentation>
+    </xs:annotation>
+    <xs:choice maxOccurs="unbounded">
+      <xs:element name="section" type="SectionType" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>The "section" element allows for grouping related paragraphs of text together, with an optional title. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="para" type="ParagraphType" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>The "paragraph" element allows for both formatted and unformatted text blocks to be included in EML. It can be plain text or text with a limited set of markup tags, including emphasis, subscript, superscript, and lists. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+    <xs:attribute ref="xml:lang"/>
+  </xs:complexType>
+  <xs:complexType name="SectionType">
+    <xs:annotation>
+      <xs:documentation>The "section" element allows for grouping related paragraphs (or other sections) of text together, with an optional title. This markup is a subset of DocBook.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="title" type="i18nString" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The optional title for a section. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element name="para" type="ParagraphType">
+          <xs:annotation>
+            <xs:documentation>The "paragraph" element allows for both formatted and unformatted text blocks to be included in EML. It can be plain text or text with a limited set of markup tags, including emphasis, subscript, superscript, and lists. This markup
+              is a subset of DocBook.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="section" type="SectionType">
+          <xs:annotation>
+            <xs:documentation>The "section" element allows for grouping related paragraphs of text together, with an optional title. This markup is a subset of DocBook.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute ref="xml:lang"/>
+  </xs:complexType>
+  <xs:complexType name="ParagraphType" mixed="true">
+    <xs:annotation>
+      <xs:documentation>The "paragraph" element allows for both formatted and unformatted text blocks to be included in EML. It can be plain text or text with a limited set of markup tags, including emphasis, subscript, superscript, lists and links. This
+        markup is a subset of DocBook.</xs:documentation>
+    </xs:annotation>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="value" type="i18nString" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>Language translation as specified by the xml:lang attribute</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="itemizedlist" type="ListType">
+        <xs:annotation>
+          <xs:documentation>A list of items in a text paragraph. The list is generally displayed as a bulleted list. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="orderedlist" type="ListType">
+        <xs:annotation>
+          <xs:documentation>An ordered list of items in a text paragraph. The list is generally displayed as a numbered list. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="emphasis">
+        <xs:annotation>
+          <xs:documentation>A span of emphasized text in a paragraph. Emphasized text is generally rendered as boldfaced or otherwise distinct from the surrounding text. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+          <xs:sequence>
+            <xs:element name="value" type="i18nString" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+          <xs:attribute ref="xml:lang"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="subscript" type="SubSuperScriptType">
+        <xs:annotation>
+          <xs:documentation>A subscript in a text paragraph. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="superscript" type="SubSuperScriptType">
+        <xs:annotation>
+          <xs:documentation>A superscript in a text paragraph. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="literalLayout">
+        <xs:annotation>
+          <xs:documentation>This element specifies that the structure of the text within the tag, specifically the whitespace, should not be altered.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+          <xs:sequence>
+            <xs:element name="value" type="i18nString" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ulink" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>This element and its children allow paragraphs to contain urls and titles for anchor tags. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="citetitle" type="i18nString">
+              <xs:annotation>
+                <xs:documentation>The Dublin Core Metadata Initiative</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="url" use="optional">
+            <xs:annotation>
+              <xs:documentation>The url attribute contains the location of the work for a link. This markup is a subset of DocBook.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+    <xs:attribute ref="xml:lang"/>
+  </xs:complexType>
+  <xs:complexType name="ListType">
+    <xs:annotation>
+      <xs:documentation>A list of items in a text paragraph. The ListType is used by both orderedlist elements and itemizedlist elements. This markup is a subset of DocBook.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="listitem" minOccurs="1" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>An item in a list of items. Each list item is formatted as a bulleted or numbered item depending on the list type in which it resides. List items contain paragraphs which in turn can be plain text or text with a limited set of markup
+            tags, including emphasis, subscript, superscript, and lists. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="para" type="ParagraphType">
+              <xs:annotation>
+                <xs:documentation>The "paragraph" element allows for both formatted and unformatted text blocks to be included in EML. It can be plain text or text with a limited set of markup tags, including emphasis, subscript, superscript, and lists. This markup
+                  is a subset of DocBook.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="itemizedlist" type="ListType">
+              <xs:annotation>
+                <xs:documentation>A list of items in a text paragraph. The list is generally displayed as a bulleted list. This markup is a subset of DocBook.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="orderedlist" type="ListType">
+              <xs:annotation>
+                <xs:documentation>An ordered list of items in a text paragraph. The list is generally displayed as a numbered list. This markup is a subset of DocBook.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SubSuperScriptType" mixed="true">
+    <xs:annotation>
+      <xs:documentation>A subscript or a superscript in a text paragraph. This type is used by both subscript and superscript elements to define their recursive content. This markup is a subset of DocBook.</xs:documentation>
+    </xs:annotation>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="value" type="i18nString" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>Language translation as specified by the xml:lang attribute</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="subscript" type="SubSuperScriptType">
+        <xs:annotation>
+          <xs:documentation>A subscript in a text paragraph. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="superscript" type="SubSuperScriptType">
+        <xs:annotation>
+          <xs:documentation>A superscript in a text paragraph. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+    <xs:attribute ref="xml:lang"/>
   </xs:complexType>
 </xs:schema>
