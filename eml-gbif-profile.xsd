@@ -44,7 +44,7 @@
         <xs:element ref="keywordSet" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="additionalInfo" minOccurs="0"/>
         <xs:element ref="intellectualRights" minOccurs="0"/>
-        <xs:element ref="licensed" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="licensed" minOccurs="0"/>
         <xs:element ref="distribution" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="coverage" minOccurs="0"/>
         <xs:element ref="purpose" minOccurs="0"/>
