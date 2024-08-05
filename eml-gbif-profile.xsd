@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- The element annotations in this document are drawn from the appropriate standard.  -->
-<!-- For EML - see http://knb.ecoinformatics.org/software/eml/eml-2.1.1/index.html -->
+<!-- For EML - see https://eml.ecoinformatics.org/ -->
 <!-- For NCD - see Natural Collections Descriptions (NCD) v0.9 2008  http://wiki.tdwg.org/twiki/bin/viewfile/NCD/WebHome?rev=1;filename=NCD-v090_TDWG.doc -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.2"
-  xmlns:eml="eml://ecoinformatics.org/eml-2.1.1" elementFormDefault="qualified"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.3"
+  xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" elementFormDefault="qualified"
   xmlns:dc="http://purl.org/dc/terms/">
-  <xs:import namespace="eml://ecoinformatics.org/eml-2.1.1" schemaLocation="eml.xsd"/>
+  <xs:import namespace="https://eml.ecoinformatics.org/eml-2.2.0" schemaLocation="eml.xsd"/>
   <xs:import namespace="http://purl.org/dc/terms/" schemaLocation="dc.xsd"/>
   <xs:import namespace="http://www.w3.org/XML/1998/namespace"
     schemaLocation="http://rs.gbif.org/schema/xml.xsd"/>
@@ -16,6 +16,14 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="alternateIdentifier" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="shortName" type="NonEmptyStringType" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>The 'shortName' field provides a concise name that
+              describes the resource that is being documented. It is the
+              appropriate place to store a filename associated with other storage
+              systems.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
         <xs:element ref="title" maxOccurs="unbounded"/>
         <!-- Original creator of the dataset/resource, not necessarily the agent authoring the eml file nor the primary contact -->
         <xs:element name="creator" type="agentType" maxOccurs="unbounded">
@@ -36,21 +44,76 @@
         <xs:element ref="keywordSet" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="additionalInfo" minOccurs="0"/>
         <xs:element ref="intellectualRights" minOccurs="0"/>
-        <xs:element ref="distribution" minOccurs="0"/>
+        <xs:element ref="licensed" minOccurs="0"/>
+        <xs:element ref="distribution" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="coverage" minOccurs="0"/>
         <xs:element ref="purpose" minOccurs="0"/>
+        <xs:element ref="introduction" minOccurs="0"/>
+        <xs:element ref="gettingStarted" minOccurs="0"/>
+        <xs:element ref="acknowledgements" minOccurs="0"/>
         <xs:element minOccurs="0" name="maintenance">
           <xs:complexType>
             <xs:sequence>
               <xs:element ref="description"/>
               <xs:element name="maintenanceUpdateFrequency" type="MaintUpFreqType"/>
+              <xs:element name="changeHistory" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                  <xs:documentation>A description of changes made to the data since
+                    its release.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="changeScope" type="NonEmptyStringType">
+                      <xs:annotation>
+                        <xs:documentation>The expression should unambiguously identify
+                          the entity(s) and attribute(s) that were
+                          changed.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element name="oldValue" type="NonEmptyStringType">
+                      <xs:annotation>
+                        <xs:documentation>The previous value or an expression that
+                          describes the previous value of the
+                          data.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element name="changeDate" type="xs:date">
+                      <xs:annotation>
+                        <xs:documentation>The date the changes were applied.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element name="comment" type="NonEmptyStringType" minOccurs="0">
+                      <xs:annotation>
+                        <xs:documentation>Explanation or justification for the change
+                          made to the data.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <!-- Current primary contact for the dataset. The creator of the resource might be dead, left the organisation or doesnt want to be bothered. -->
+        <!-- Current primary contact for the dataset. The creator of the resource might be dead, left the organisation or doesn't want to be bothered. -->
         <xs:element name="contact" type="agentType" maxOccurs="unbounded"/>
+        <xs:element name="publisher" type="agentType" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>The publisher of this data set. At times this is
+              a traditional publishing house, but it may also simply be an
+              institution that is making the data available in a published (ie,
+              citable) format.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
         <xs:element ref="methods" minOccurs="0"/>
         <xs:element ref="project" minOccurs="0"/>
+        <xs:element name="literatureCited" type="CitationListType" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>A citation to articles or products which were referenced
+              in the dataset or its associated metadata. The list represents the bibliography
+              of works related to the dataset, whether for reference, comparison, or others
+              purposes.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -70,7 +133,8 @@
       <xs:enumeration value="monthly"/>
       <xs:enumeration value="notPlanned"/>
       <xs:enumeration value="weekly"/>
-      <xs:enumeration value="unkown"/>
+      <xs:enumeration value="unknown"/>
+      <xs:enumeration value="unkown"/>  <!-- deprecated, keep for compat., spelling error from prior version -->
       <xs:enumeration value="otherMaintenancePeriod"/>
     </xs:restriction>
   </xs:simpleType>
@@ -90,11 +154,14 @@
         </xs:element>
       </xs:choice>
       <xs:element ref="address" minOccurs="0"/>
-      <xs:element ref="phone" minOccurs="0"/>
-      <xs:element ref="electronicMailAddress" minOccurs="0"/>
-      <xs:element ref="onlineUrl" minOccurs="0"/>
+      <xs:element ref="phone" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element ref="electronicMailAddress" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element ref="onlineUrl" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element ref="userId" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
+    <xs:attribute name="id" type="IDType" use="optional"/>
+    <xs:attribute name="system" type="SystemType" use="optional"/>
+    <xs:attribute name="scope" type="ScopeType" use="optional"/>
   </xs:complexType>
   <xs:complexType name="agentWithRoleType">
     <xs:complexContent>
@@ -120,15 +187,10 @@
       <xs:documentation>The language in which the resource (not the metadata document) is written</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="abstract">
+  <xs:element name="abstract" type="TextType">
     <xs:annotation>
       <xs:documentation>A brief overview describing the dataset</xs:documentation>
     </xs:annotation>
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="para" maxOccurs="unbounded"/>
-      </xs:sequence>
-    </xs:complexType>
   </xs:element>
   <xs:element name="keywordSet">
     <xs:annotation>
@@ -166,6 +228,30 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="para"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="licensed">
+    <xs:annotation>
+      <xs:documentation>Provides information on how the resource is licensed and what rights may be available to users.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="licenseName" type="NonEmptyStringType" minOccurs="1">
+          <xs:annotation>
+            <xs:documentation>The official name of a license that applies to the data and metadata described in this metadata record.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="url" type="xs:anyURI" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>The persistent URL for the license, typically a SPDX URL, or an official URL from another well-known license vocabulary.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="identifier" type="NonEmptyStringType" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>The official identifier for the license, which should be drawn from the SPDX license vocabulary, or a similar well-known license vocabulary.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -306,6 +392,21 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="introduction" type="TextType">
+    <xs:annotation>
+      <xs:documentation>One to many paragraphs that provide background and context for the dataset with appropriate figures and references.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="gettingStarted" type="TextType">
+    <xs:annotation>
+      <xs:documentation>One or more paragraphs that describe the overall interpretation, content and structure of the dataset.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="acknowledgements" type="TextType">
+    <xs:annotation>
+      <xs:documentation>One or more sentences that acknowledge funders and other key contributors to the study (excluding the dataset authors listed in the creator field).</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="methods">
     <xs:annotation>
       <xs:documentation>The methods field documents scientific methods used in the collection of this dataset. It includes information on items such as tools, instrument calibration and software.</xs:documentation>
@@ -349,11 +450,13 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="project">
+  <xs:element name="project" type="projectType">
     <xs:annotation>
       <xs:documentation>The project field contains information on the project in which this dataset was collected. It includes information such as project personnel, funding, study area, project design and related projects.</xs:documentation>
     </xs:annotation>
-    <xs:complexType>
+  </xs:element>
+  <xs:complexType name="projectType">
+    <xs:choice>
       <xs:sequence>
         <xs:element ref="title"/>
         <xs:element name="personnel" type="agentWithRoleType" maxOccurs="unbounded">
@@ -361,7 +464,7 @@
             <xs:documentation>The Personnel field extends ResponsibleParty with role information and is used to document people involved in a research project by providing contact information and their role in the project. </xs:documentation>
           </xs:annotation>
         </xs:element>
-        <xs:element minOccurs="0" ref="abstract"/>
+        <xs:element ref="abstract" minOccurs="0"/>
         <xs:element name="funding" minOccurs="0">
           <xs:annotation>
             <xs:documentation>The funding field is used to provide information about funding sources for the project such as: grant and contract numbers; names and addresses of funding sources.</xs:documentation>
@@ -371,6 +474,20 @@
               <xs:element ref="para"/>
             </xs:sequence>
           </xs:complexType>
+        </xs:element>
+        <xs:element name="award" type="awardType" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>The award field is used to provide specific information
+              about the funding awards for a project in a structured format.  Sub-fields
+              are provided for the name of the funding agency, the Open Funder Registry
+              identifiers for the agency and program that made the award, the award
+              number assigned, the title of the award, and the URL to the award page
+              describing the award. The award field replaces the earlier funding field
+              from prior EML version releases.  In general, the funding agency should be
+              listed with a cross-reference to the appropriate identifier from the
+              Open Funder Registry (included in the EML distribution, but which is
+              also update periodically from the Open Funder Registry).</xs:documentation>
+          </xs:annotation>
         </xs:element>
         <xs:element name="studyAreaDescription" minOccurs="0">
           <xs:annotation>
@@ -387,14 +504,100 @@
             <xs:documentation>The field designDescription contains general textual descriptions of research design. It can include detailed accounts of goals, motivations, theory, hypotheses, strategy, statistical design, and actual work. </xs:documentation>
           </xs:annotation>
         </xs:element>
+        <xs:element name="relatedProject" type="relatedProjectType" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Links to other projects.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
       </xs:sequence>
-      <xs:attribute name="id" type="xs:string" use="optional">
+    </xs:choice>
+    <xs:attribute name="id" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation>A unique identifier for the project. This can be used to link multiple datasets that are associated in some way with the same project.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="relatedProjectType">
+    <xs:choice>
+      <xs:sequence>
+        <xs:element ref="title"/>
+        <xs:element name="personnel" type="agentWithRoleType" maxOccurs="unbounded"/>
+        <xs:element ref="abstract" minOccurs="0"/>
+      </xs:sequence>
+    </xs:choice>
+    <xs:attribute name="id" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation>A unique identifier for the project. This can be used to link multiple datasets that are associated in some way with the same project.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="awardType">
+    <xs:annotation>
+      <xs:documentation>The awardType is used to enter information about a funding award
+        associated with a project.  The containing project contains the list of
+        investigators and for the award, while the `award` field contains specifics
+        such as the agency name, award number, and funding program identifiers.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="funderName" type="NonEmptyStringType" minOccurs="1" maxOccurs="1">
         <xs:annotation>
-          <xs:documentation>A unique identifier for the project. This can be used to link multiple datasets that are associated in some way with the same project.</xs:documentation>
+          <xs:documentation>The name of the funding institution, with fully expanded acronyms
+            to show the full, official name of the funding agency. In general, this should match
+            the official name of the funder as listed in an Authority such as the Open
+            Funder Registry.  The Open Funder Registry and other organizational authorities may
+            provide a list of other alternative names for the funding agency.</xs:documentation>
         </xs:annotation>
-      </xs:attribute>
-    </xs:complexType>
-  </xs:element>
+      </xs:element>
+      <xs:element name="funderIdentifier" type="NonEmptyStringType" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>The funder identifier is used to provide one or more
+            canonical identifiers that reference the funder.  These identifiers
+            should be globally unique.  The most common form of a funder identifier
+            is a DOI identifier of an institution or program drawn from the CrossRef
+            Open Funder Registry (https://gitlab.com/crossref/open_funder_registry),
+            which assigns DOIs to each funding agency and to their programs, and
+            links these together in a navigable hierarchy.  A copy of the current
+            Funder Registry is included as an RDF file with EML for reference, but
+            as the list is constantly growing, users can retrieve new copies of the
+            RDF file to get updates and current metadata about funders.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="awardNumber" type="NonEmptyStringType" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>The awardNumber field provides the unique identifier used by
+            the funder to uniquely identify an award.  These are typically alphanumeric values
+            that are unique within the system used by a given funder.  The number should be listed
+            using the canonical form that each funder uses to express its award numbers, and not
+            be prefixed or postfixed with extra text such as the acronym of the funder or the name
+            of the funder, which is available instead in the funderName field.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="title" type="NonEmptyStringType" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>The title field is used for the title of the award or grant
+            being described.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="awardUrl" type="NonEmptyStringType" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>Typically, the awardUrl is use to find and locate the award, and
+            generally addresses the internet location to find out more information about the
+            award.  This should point to a funder site for the award, rather than a project site.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CitationListType">
+    <xs:choice minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="bibtex" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The bibtex field provides a parseable list of citations formatted according to the Bibtex formatting conventions. Each citation entry is assigned a unique key that must be unique across all bibtex fields in the EML document. The citation key can be used in markdown sections of the text to refer to this citation using the pandoc-style of inline citation keys.  See the markdown element for more details. The record is delimited using curly braces. Most reference software can both import and export citations in Bibtex format, so this is a simpler representation to produce and consume than native EML citation representations.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+
 
   <xs:element name="descriptor">
     <xs:annotation>
@@ -1158,6 +1361,13 @@
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
+        <xs:element name="salutation" type="NonEmptyStringType" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>The salutation field is used in addressing an
+              individual with a particular title, such as Dr., Ms., Mrs., Mr.,
+              etc.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
         <xs:element name="givenName" type="NonEmptyStringType" minOccurs="0">
           <xs:annotation>
             <xs:documentation>The given name field can be used for first name of the individual associated with the resource, or for any other names that are not intended to be alphabetized, (as appropriate). </xs:documentation>
@@ -1177,7 +1387,7 @@
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="deliveryPoint" type="NonEmptyStringType" minOccurs="0">
+        <xs:element name="deliveryPoint" type="NonEmptyStringType" minOccurs="0" maxOccurs="unbounded">
           <xs:annotation>
             <xs:documentation>The delivery point field is used for the physical address for postal communication, e.g., GBIF Secretariat, Universitetsparken 15</xs:documentation>
           </xs:annotation>
@@ -1328,8 +1538,46 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
+  <xs:simpleType name="IDType">
+    <xs:annotation>
+      <xs:documentation>A unique identifier for this additional
+        metadata that can be used to reference it elsewhere.
+        This is a formal field in that it is an error to provide
+        a value for the id attribute that is not unique within
+        the document's set of id attributes. This is designed to
+        allow other portions of the metadata to reference this
+        section formally.</xs:documentation>
+    </xs:annotation>
+    <xs:list itemType="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="SystemType">
+    <xs:annotation>
+      <xs:documentation>The data management system within which an
+        identifier is in scope and therefore unique. This is typically
+        a URL (Uniform Resource Locator) that indicates a data
+        management system.  All identifiers that share a system must
+        be unique. In other words, if the same identifier is used in
+        two locations with identical systems, then by definition the
+        objects at which they point are in fact the same object.</xs:documentation>
+    </xs:annotation>
+    <xs:list itemType="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="ScopeType">
+    <xs:annotation>
+      <xs:documentation>The scope of the identifier.  Scope is generally
+        set to either "system", meaning that it is scoped according to
+        the "system" attribute, or "document" if it is only to be in scope
+        within this single document instance.  In this particular use of
+        scope, it is FIXED to be "system" because the packageId is
+        required and always has the scope of the required "system".</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="system"/>
+      <xs:enumeration value="document"/>
+    </xs:restriction>
+  </xs:simpleType>
 
-  <!-- DATA TYPES TAKEN FROM THE EML 2.1.1 SCHEMAS -->
+  <!-- DATA TYPES TAKEN FROM THE EML SCHEMAS -->
   <xs:simpleType name="yearDate">
     <xs:annotation>
       <xs:documentation>
@@ -1364,5 +1612,179 @@
         <xs:attribute ref="xml:lang" use="optional"/>
       </xs:extension>
     </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="TextType" mixed="true">
+    <xs:annotation>
+      <xs:documentation>The "text" element allows for both formatted and unformatted text blocks to be included in EML. It can contain a number of relevant subsections that allow the use of titles, sections, and paragraphs in the text block. This markup is a subset of DocBook, or alternatively can be specified using Markdown text blocks.</xs:documentation>
+    </xs:annotation>
+    <xs:choice maxOccurs="unbounded">
+      <xs:element name="section" type="SectionType" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>The "section" element allows for grouping related paragraphs of text together, with an optional title. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="para" type="ParagraphType" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>The "paragraph" element allows for both formatted and unformatted text blocks to be included in EML. It can be plain text or text with a limited set of markup tags, including emphasis, subscript, superscript, and lists. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+    <xs:attribute ref="xml:lang"/>
+  </xs:complexType>
+  <xs:complexType name="SectionType">
+    <xs:annotation>
+      <xs:documentation>The "section" element allows for grouping related paragraphs (or other sections) of text together, with an optional title. This markup is a subset of DocBook.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="title" type="i18nString" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The optional title for a section. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element name="para" type="ParagraphType">
+          <xs:annotation>
+            <xs:documentation>The "paragraph" element allows for both formatted and unformatted text blocks to be included in EML. It can be plain text or text with a limited set of markup tags, including emphasis, subscript, superscript, and lists. This markup
+              is a subset of DocBook.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="section" type="SectionType">
+          <xs:annotation>
+            <xs:documentation>The "section" element allows for grouping related paragraphs of text together, with an optional title. This markup is a subset of DocBook.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute ref="xml:lang"/>
+  </xs:complexType>
+  <xs:complexType name="ParagraphType" mixed="true">
+    <xs:annotation>
+      <xs:documentation>The "paragraph" element allows for both formatted and unformatted text blocks to be included in EML. It can be plain text or text with a limited set of markup tags, including emphasis, subscript, superscript, lists and links. This
+        markup is a subset of DocBook.</xs:documentation>
+    </xs:annotation>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="value" type="i18nString" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>Language translation as specified by the xml:lang attribute</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="itemizedlist" type="ListType">
+        <xs:annotation>
+          <xs:documentation>A list of items in a text paragraph. The list is generally displayed as a bulleted list. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="orderedlist" type="ListType">
+        <xs:annotation>
+          <xs:documentation>An ordered list of items in a text paragraph. The list is generally displayed as a numbered list. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="emphasis">
+        <xs:annotation>
+          <xs:documentation>A span of emphasized text in a paragraph. Emphasized text is generally rendered as boldfaced or otherwise distinct from the surrounding text. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+          <xs:sequence>
+            <xs:element name="value" type="i18nString" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+          <xs:attribute ref="xml:lang"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="subscript" type="SubSuperScriptType">
+        <xs:annotation>
+          <xs:documentation>A subscript in a text paragraph. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="superscript" type="SubSuperScriptType">
+        <xs:annotation>
+          <xs:documentation>A superscript in a text paragraph. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="literalLayout">
+        <xs:annotation>
+          <xs:documentation>This element specifies that the structure of the text within the tag, specifically the whitespace, should not be altered.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+          <xs:sequence>
+            <xs:element name="value" type="i18nString" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ulink" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>This element and its children allow paragraphs to contain urls and titles for anchor tags. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+          <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="citetitle" type="i18nString">
+              <xs:annotation>
+                <xs:documentation>The Dublin Core Metadata Initiative</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="url" use="optional">
+            <xs:annotation>
+              <xs:documentation>The url attribute contains the location of the work for a link. This markup is a subset of DocBook.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+    <xs:attribute ref="xml:lang"/>
+  </xs:complexType>
+  <xs:complexType name="ListType">
+    <xs:annotation>
+      <xs:documentation>A list of items in a text paragraph. The ListType is used by both orderedlist elements and itemizedlist elements. This markup is a subset of DocBook.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="listitem" minOccurs="1" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>An item in a list of items. Each list item is formatted as a bulleted or numbered item depending on the list type in which it resides. List items contain paragraphs which in turn can be plain text or text with a limited set of markup
+            tags, including emphasis, subscript, superscript, and lists. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="para" type="ParagraphType">
+              <xs:annotation>
+                <xs:documentation>The "paragraph" element allows for both formatted and unformatted text blocks to be included in EML. It can be plain text or text with a limited set of markup tags, including emphasis, subscript, superscript, and lists. This markup
+                  is a subset of DocBook.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="itemizedlist" type="ListType">
+              <xs:annotation>
+                <xs:documentation>A list of items in a text paragraph. The list is generally displayed as a bulleted list. This markup is a subset of DocBook.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="orderedlist" type="ListType">
+              <xs:annotation>
+                <xs:documentation>An ordered list of items in a text paragraph. The list is generally displayed as a numbered list. This markup is a subset of DocBook.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SubSuperScriptType" mixed="true">
+    <xs:annotation>
+      <xs:documentation>A subscript or a superscript in a text paragraph. This type is used by both subscript and superscript elements to define their recursive content. This markup is a subset of DocBook.</xs:documentation>
+    </xs:annotation>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="value" type="i18nString" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>Language translation as specified by the xml:lang attribute</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="subscript" type="SubSuperScriptType">
+        <xs:annotation>
+          <xs:documentation>A subscript in a text paragraph. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="superscript" type="SubSuperScriptType">
+        <xs:annotation>
+          <xs:documentation>A superscript in a text paragraph. This markup is a subset of DocBook.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+    <xs:attribute ref="xml:lang"/>
   </xs:complexType>
 </xs:schema>
