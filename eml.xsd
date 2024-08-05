@@ -22,8 +22,8 @@
       <xs:attribute ref="xml:lang" use="optional">
         <xs:annotation>
           <xs:documentation>The language in which the metadata (as opposed to the resource being described by the metadata) is written</xs:documentation>
-        </xs:annotation>        
+        </xs:annotation>
       </xs:attribute>
     </xs:complexType>
-  </xs:element>  
+  </xs:element>
 </xs:schema>
