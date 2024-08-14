@@ -382,15 +382,10 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="purpose">
+  <xs:element name="purpose" type="TextType">
     <xs:annotation>
       <xs:documentation>A description of the purpose of the resource/dataset</xs:documentation>
     </xs:annotation>
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="para"/>
-      </xs:sequence>
-    </xs:complexType>
   </xs:element>
   <xs:element name="introduction" type="TextType">
     <xs:annotation>
