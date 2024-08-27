@@ -18,10 +18,7 @@
         <xs:element ref="alternateIdentifier" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="shortName" type="NonEmptyStringType" minOccurs="0">
           <xs:annotation>
-            <xs:documentation>The 'shortName' field provides a concise name that
-              describes the resource that is being documented. It is the
-              appropriate place to store a filename associated with other storage
-              systems.</xs:documentation>
+            <xs:documentation>The 'shortName' field provides a concise name that describes the resource that is being documented. It is the appropriate place to store a filename associated with other storage systems.</xs:documentation>
           </xs:annotation>
         </xs:element>
         <xs:element ref="title" maxOccurs="unbounded"/>
@@ -98,10 +95,7 @@
         <xs:element name="contact" type="agentType" maxOccurs="unbounded"/>
         <xs:element name="publisher" type="agentType" minOccurs="0">
           <xs:annotation>
-            <xs:documentation>The publisher of this data set. At times this is
-              a traditional publishing house, but it may also simply be an
-              institution that is making the data available in a published (ie,
-              citable) format.</xs:documentation>
+            <xs:documentation>The publisher of this data set. This is typically an institution that is making the data available in a published (ie, citable) format.</xs:documentation>
           </xs:annotation>
         </xs:element>
         <xs:element ref="methods" minOccurs="0"/>
@@ -233,7 +227,7 @@
   </xs:element>
   <xs:element name="licensed">
     <xs:annotation>
-      <xs:documentation>Provides information on how the resource is licensed and what rights may be available to users.</xs:documentation>
+      <xs:documentation>This element provides information on how the resource is licensed and what rights may be available to users. GBIF only supports the following licenses CC0, CC BY and CC BY-NC. By default, the license provided here applies to all the dataset records.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
@@ -384,22 +378,24 @@
   </xs:element>
   <xs:element name="purpose" type="TextType">
     <xs:annotation>
-      <xs:documentation>A description of the purpose of the resource/dataset</xs:documentation>
+      <xs:documentation>A synopsis of the purpose of this dataset. It may include one or more paragraphs, including a summary of key findings if appropriate.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="introduction" type="TextType">
     <xs:annotation>
-      <xs:documentation>One to many paragraphs that provide background and context for the dataset with appropriate figures and references.</xs:documentation>
+      <xs:documentation>One to many paragraphs that provide background and context for the dataset with appropriate figures and references.  This is similar to the introduction for a journal article, and would include, for example, project objectives, hypotheses being addressed, what is known about the pattern or process under study, how the data have been used to date (including references), and how they could be used in the future.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="gettingStarted" type="TextType">
     <xs:annotation>
-      <xs:documentation>One or more paragraphs that describe the overall interpretation, content and structure of the dataset.</xs:documentation>
+      <xs:documentation>One or more paragraphs describing the dataset's overall interpretation, content and structure. For example, the number and names of data files, the types of measurements that they contain, how those data files fit
+together in an overall design, and how they relate to the data collection methods, experimental design, and sampling design described in other EML sections. One might describe any specialized software that is available and/or may be necessary for analyzing or interpreting the data, and possibly include a high-level description of data formats if they are unusual.
+</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="acknowledgements" type="TextType">
     <xs:annotation>
-      <xs:documentation>One or more sentences that acknowledge funders and other key contributors to the study (excluding the dataset authors listed in the creator field).</xs:documentation>
+      <xs:documentation>One or more sentences that acknowledge funders and other key contributors to the study (excluding the dataset authors listed in the creator field). Note that funding awards are also listed by award number in the award section, which provides a structured list of funders, award numbers, and award URIs for the dataset.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="methods">
@@ -472,16 +468,8 @@
         </xs:element>
         <xs:element name="award" type="awardType" minOccurs="0" maxOccurs="unbounded">
           <xs:annotation>
-            <xs:documentation>The award field is used to provide specific information
-              about the funding awards for a project in a structured format.  Sub-fields
-              are provided for the name of the funding agency, the Open Funder Registry
-              identifiers for the agency and program that made the award, the award
-              number assigned, the title of the award, and the URL to the award page
-              describing the award. The award field replaces the earlier funding field
-              from prior EML version releases.  In general, the funding agency should be
-              listed with a cross-reference to the appropriate identifier from the
-              Open Funder Registry (included in the EML distribution, but which is
-              also update periodically from the Open Funder Registry).</xs:documentation>
+            <xs:documentation>The award field is used to provide specific information about the funding awards for a project in a structured format. Sub-fields are provided for the name of the funding agency, the Open Funder Registry identifiers for the agency and program that made the award, the award number assigned, the title of the award, and the URL to the award page describing the award. In general, the funding agency should be listed with a cross-reference to the appropriate identifier from the Open Funder Registry (included in the EML distribution but updated periodically from the Open Funder Registry).
+</xs:documentation>
           </xs:annotation>
         </xs:element>
         <xs:element name="studyAreaDescription" minOccurs="0">
@@ -501,7 +489,7 @@
         </xs:element>
         <xs:element name="relatedProject" type="relatedProjectType" minOccurs="0" maxOccurs="unbounded">
           <xs:annotation>
-            <xs:documentation>Links to other projects.</xs:documentation>
+            <xs:documentation>This field is a recursive link to another project. This allows projects to be nested under one another in the case where one project spawns another.</xs:documentation>
           </xs:annotation>
         </xs:element>
       </xs:sequence>
@@ -1358,9 +1346,7 @@
       <xs:sequence>
         <xs:element name="salutation" type="NonEmptyStringType" minOccurs="0" maxOccurs="unbounded">
           <xs:annotation>
-            <xs:documentation>The salutation field is used in addressing an
-              individual with a particular title, such as Dr., Ms., Mrs., Mr.,
-              etc.</xs:documentation>
+            <xs:documentation>The salutation field is used in addressing an individual with a particular title, such as Dr., Ms., Mrs., Mr., etc.</xs:documentation>
           </xs:annotation>
         </xs:element>
         <xs:element name="givenName" type="NonEmptyStringType" minOccurs="0">
